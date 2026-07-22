@@ -81,11 +81,11 @@ Your support helps me dedicate more time to developing and maintaining open-sour
 
 <div align="left" style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
   <a href="https://buymeacoffee.com/shahils">
-    <img src="https://i.postimg.cc/SQdPYtnh/UPI.png" height=auto width="210" alt="shahils" />
+    <img src="https://i.postimg.cc/SQdPYtnh/UPI.png" height=auto width="270" alt="shahils" />
   </a>
  <br>
   <a>
-    <img src="https://i.postimg.cc/5NrjCLHB/BHIM-QR.png" height="215" width=auto />
+    <img src="https://i.postimg.cc/wMrCJkh5/phonepe.png" height="290" width=auto />
   </a>
 </div>
 

@@ -18,7 +18,7 @@
   Let’s build something awesome together — one project at a time. 🤝
 </h3>
 
-<h2 align="center">#OpenSource #FreelanceDeveloper #GoogleAppsScript #Automation #TechEnthusiast</h2>
+<h2 align="center">#TechEnthusiast</h2>
 
 <img align="right" alt="Coding" width="300" src="https://i.postimg.cc/CL981DpX/DEVELOPER.gif">
 

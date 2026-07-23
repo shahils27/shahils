@@ -3,40 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shahil Shajahan | Tech Enthusiast</title>
+    <title>Shahil Shajahan | Software Engineer</title>
     <meta name="description" content="Portfolio of Shahil Shajahan, a Software Engineer specializing in Backend Systems, Automation, and Embedded Development.">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Script run immediately to prevent white flash on load -->
+    <script>
+        // Check local storage first, then system preference
+        const savedTheme = localStorage.getItem('shahil_theme');
+        const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+        if (savedTheme === 'light' || (!savedTheme && prefersLight)) {
+            document.documentElement.classList.add('light-mode');
+        }
+    </script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
         
-        /* 
-           FIXED BACKGROUND: Added the image directly to the body 
-           with a dark gradient overlay so it perfectly blends with the 3D particles.
-        */
+        /* THEME VARIABLES - DARK MODE (DEFAULT) */
+        :root {
+            --bg-base: #03050a;
+            --text-main: #ffffff;
+            --text-muted: #94a3b8; 
+            --glass-bg: rgba(16, 23, 42, 0.5);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --modal-bg: rgba(10, 15, 30, 0.95);
+            --overlay-color: rgba(5, 8, 20, 0.85); 
+            --particle-color: 0x4facfe;
+        }
+
+        /* LIGHT MODE OVERRIDES - CONTROLLED BY CLASS NOW */
+        .light-mode {
+            --bg-base: #f1f5f9; 
+            --text-main: #0f172a; 
+            --text-muted: #334155; 
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(0, 0, 0, 0.1);
+            --modal-bg: rgba(255, 255, 255, 0.95);
+            --overlay-color: rgba(248, 250, 252, 0.96); 
+            --particle-color: 0x0ea5e9; 
+        }
+        
+        .light-mode .gradient-text { 
+            background: linear-gradient(to right, #0369a1, #4338ca, #7e22ce) !important; 
+            -webkit-background-clip: text !important; 
+            -webkit-text-fill-color: transparent !important; 
+        }
+        
+        .light-mode .hero-text { 
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.15)) !important; 
+            text-shadow: none !important; 
+        }
+        
+        .light-mode .text-slate-300 { color: #334155 !important; font-weight: 500; }
+        .light-mode .text-white { color: #0f172a !important; }
+        .light-mode .text-purple-500 { color: #6d28d9 !important; font-weight: 700; }
+
+        .light-mode .bg-slate-800 { background-color: rgba(0,0,0,0.05) !important; color: #0f172a !important; }
+        .light-mode .bg-white\/5 { background-color: rgba(0,0,0,0.05) !important; border-color: rgba(0,0,0,0.1) !important; color: #0f172a !important; }
+        .light-mode .border-white\/10 { border-color: rgba(0,0,0,0.1) !important; }
+        .light-mode .bg-slate-900\/20 { background-color: rgba(255,255,255,0.2) !important; }
+        .light-mode #modal-github-link { background-color: #0f172a !important; color: white !important; }
+        .light-mode #modal-github-link:hover { background-color: #334155 !important; }
+        .light-mode .text-slate-500 { color: #64748b !important; }
+        .light-mode .bg-black\/60 { background-color: rgba(255,255,255,0.8) !important; } 
+
         body, html { 
             margin: 0; 
             padding: 0; 
             font-family: 'Space Grotesk', sans-serif; 
-            color: #ffffff; 
+            color: var(--text-main); 
             overflow-x: hidden; 
             scroll-behavior: smooth; 
             
             background: 
-                linear-gradient(rgba(5, 8, 20, 0.85), rgba(5, 8, 20, 0.85)),
+                linear-gradient(var(--overlay-color), var(--overlay-color)),
                 url('https://media.licdn.com/dms/image/v2/D5616AQEFd2DK1C9gaw/profile-displaybackgroundimage-shrink_200_800/B56Z.LKdCmGQAQ-/0/1784746201559?e=1786579200&v=beta&t=m_pz-KcI-GlkIL6eY0d_5DRkz9h2c29Rpv3_lgSHUUg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
             background-repeat: no-repeat;
+            background-color: var(--bg-base); 
+            transition: background 0.5s ease, color 0.5s ease;
         }
         
-        /* 3D Canvas Layer */
+        h1, h2, h3, h4, p { color: inherit; }
+        .text-slate-400 { color: var(--text-muted) !important; }
+        
+        /* Dark Mode Hero Text shadow */
+        .hero-text { 
+            filter: drop-shadow(0 4px 15px rgba(0, 0, 0, 0.6)); 
+            text-shadow: none; 
+        }
+
         #bg-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; opacity: 0.9; pointer-events: none; }
         
-        .glass-panel { background: rgba(16, 23, 42, 0.5); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); }
-        .glass-modal { background: rgba(10, 15, 30, 0.95); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); }
-        .gradient-text { background: linear-gradient(to right, #00f2fe, #4facfe, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass-panel { background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--glass-border); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); transition: background 0.3s ease; }
+        .glass-modal { background: var(--modal-bg); backdrop-filter: blur(24px); border: 1px solid var(--glass-border); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2); transition: background 0.3s ease; }
+        .gradient-text { background: linear-gradient(to right, #00f2fe, #4facfe, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; transition: all 0.3s ease; }
 
         .profile-img-container { position: relative; width: 300px; height: 300px; border-radius: 50%; perspective: 1000px; animation: float 6s ease-in-out infinite; z-index: 10; }
         .profile-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 4px solid transparent; box-shadow: 0 0 40px rgba(79, 172, 254, 0.4); }
@@ -56,7 +121,7 @@
         .modal-overlay.active .modal-content { transform: scale(1) translateY(0); opacity: 1; }
 
         .custom-scroll::-webkit-scrollbar { width: 6px; }
-        .custom-scroll::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+        .custom-scroll::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
         .custom-scroll::-webkit-scrollbar-thumb { background: #4facfe; border-radius: 10px; }
     </style>
 </head>
@@ -64,29 +129,34 @@
 
     <canvas id="bg-canvas"></canvas>
 
-    <nav class="fixed w-full z-40 glass-panel py-4">
+    <nav class="fixed w-full z-40 glass-panel py-4 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
             <a href="#" class="text-2xl font-bold tracking-tighter">Shahil<span class="text-cyan-400">.</span></a>
-            <div class="hidden md:flex space-x-8 text-sm font-semibold tracking-wide">
-                <a href="#projects-section" class="hover:text-cyan-400 transition">Projects</a>
-                <a href="#contact" class="hover:text-cyan-400 transition">Contact</a>
-                <a href="javascript:void(0)" onclick="openExternalSafe('https://github.com/shahilshajahan')" class="hover:text-cyan-400 transition">GitHub</a>
-                <a href="javascript:void(0)" onclick="openExternalSafe('https://www.linkedin.com/in/shahilshajahan/')" class="hover:text-blue-400 transition">LinkedIn</a>
+            <div class="flex space-x-6 md:space-x-8 text-sm font-semibold tracking-wide items-center">
+                <a href="#projects-section" class="hidden md:block hover:text-cyan-500 transition">Projects</a>
+                <a href="#contact" class="hidden md:block hover:text-cyan-500 transition">Contact</a>
+                <a href="javascript:void(0)" onclick="openExternalSafe('https://github.com/shahilshajahan')" class="hidden md:block hover:text-cyan-500 transition">GitHub</a>
+                <a href="javascript:void(0)" onclick="openExternalSafe('https://www.linkedin.com/in/shahilshajahan/')" class="hidden md:block hover:text-blue-500 transition">LinkedIn</a>
+                
+                <!-- THEME TOGGLE BUTTON -->
+                <button id="theme-btn" onclick="toggleTheme()" class="text-xl transition-all duration-300 hover:scale-110 focus:outline-none">
+                    <i class="fas fa-moon"></i>
+                </button>
             </div>
         </div>
     </nav>
 
     <section class="min-h-screen flex flex-col md:flex-row items-center justify-center px-6 pt-20 max-w-7xl mx-auto gap-16 z-10 relative">
         <div class="flex-1 text-center md:text-left z-10">
-            <p class="text-purple-400 font-semibold tracking-[0.2em] uppercase mb-4 text-sm animate-pulse">Tech Enthusiast & Developer</p>
-            <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight drop-shadow-2xl">
+            <p class="text-purple-500 font-semibold tracking-[0.2em] uppercase mb-4 text-sm animate-pulse hero-text">Software Engineer & Systems Integrator</p>
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight hero-text">
                 Code with purpose. <br><span class="gradient-text text-6xl md:text-8xl">Build with passion.</span>
             </h1>
-            <p class="text-lg md:text-xl text-slate-300 mb-10 leading-relaxed max-w-lg mx-auto md:mx-0">
+            <p class="text-lg md:text-xl text-slate-300 mb-10 leading-relaxed max-w-lg mx-auto md:mx-0 hero-text">
                 I engineer resilient backend architectures, hardware integrations, and automation tools designed to optimize operations and solve complex business challenges. From concept to deployment, I focus on delivering scalable, high-performance software.
             </p>
             <div class="flex flex-col sm:flex-row gap-5 justify-center md:justify-start">
-                <a href="#projects-section" class="px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-full font-bold hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(6,182,212,0.5)]">
+                <a href="#projects-section" class="px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-full font-bold hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(6,182,212,0.4)]">
                     Explore My Capabilities
                 </a>
             </div>
@@ -104,50 +174,50 @@
     <section id="projects-section" class="py-24 px-6 relative z-10">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-16 relative">
-                <h2 class="text-4xl md:text-5xl font-bold mb-4">Project <span class="gradient-text">Portfolio</span></h2>
-                <p class="text-slate-400 text-lg">A showcase of production-ready applications, embedded systems, and foundational learning milestones.</p>
+                <h2 class="text-4xl md:text-5xl font-bold mb-4 hero-text">Project <span class="gradient-text">Portfolio</span></h2>
+                <p class="text-slate-400 text-lg hero-text">A showcase of production-ready applications, embedded systems, and foundational learning milestones.</p>
             </div>
             <div id="projects-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-10"></div>
         </div>
     </section>
 
-    <section id="contact" class="py-20 px-6 relative z-10 bg-gradient-to-t from-slate-900 to-transparent">
+    <section id="contact" class="py-20 px-6 relative z-10 bg-gradient-to-t from-black/5 to-transparent">
         <div class="max-w-3xl mx-auto text-center glass-panel p-10 rounded-3xl">
-            <h2 class="text-3xl font-bold mb-6">Let's Build Together</h2>
-            <p class="text-slate-400 mb-8">Looking for an engineer who understands both logic and business value? Let's connect.</p>
-            <a href="mailto:shahilshajahan@proton.me" class="inline-flex items-center gap-3 px-8 py-4 bg-cyan-500/20 border border-cyan-500/50 hover:bg-cyan-500/40 text-white rounded-full font-bold transition duration-300 text-lg">
-                <i class="fas fa-envelope text-cyan-400"></i> shahilshajahan@proton.me
+            <h2 class="text-3xl font-bold mb-6 hero-text">Let's Build Together</h2>
+            <p class="text-slate-400 mb-8 hero-text">Looking for an engineer who understands both logic and business value? Let's connect.</p>
+            <a href="mailto:shahilshajahan@proton.me" class="inline-flex items-center gap-3 px-8 py-4 bg-cyan-500/10 border border-cyan-500/50 hover:bg-cyan-500/20 rounded-full font-bold transition duration-300 text-lg">
+                <i class="fas fa-envelope text-cyan-500"></i> shahilshajahan@proton.me
             </a>
             <div class="flex justify-center gap-8 mt-10">
-                <a href="javascript:void(0)" onclick="openExternalSafe('https://github.com/shahilshajahan')" class="text-slate-400 hover:text-white text-3xl transition duration-300 hover:scale-110"><i class="fab fa-github"></i></a>
+                <a href="javascript:void(0)" onclick="openExternalSafe('https://github.com/shahilshajahan')" class="text-slate-400 hover:text-cyan-500 text-3xl transition duration-300 hover:scale-110"><i class="fab fa-github"></i></a>
                 <a href="javascript:void(0)" onclick="openExternalSafe('https://www.linkedin.com/in/shahilshajahan/')" class="text-slate-400 hover:text-blue-500 text-3xl transition duration-300 hover:scale-110"><i class="fab fa-linkedin"></i></a>
             </div>
         </div>
     </section>
 
-    <div id="project-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4">
+    <div id="project-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4 transition-colors">
         <div class="glass-modal modal-content w-full max-w-4xl rounded-2xl overflow-hidden relative flex flex-col max-h-[90vh]">
-            <button onclick="closeModal()" class="absolute top-4 right-4 z-20 w-10 h-10 bg-black/50 hover:bg-red-500/80 rounded-full flex items-center justify-center text-white transition">
+            <button onclick="closeModal()" class="absolute top-4 right-4 z-20 w-10 h-10 bg-black/30 hover:bg-red-500/80 rounded-full flex items-center justify-center text-white transition">
                 <i class="fas fa-times"></i>
             </button>
             <div class="relative h-56 md:h-72 w-full bg-slate-800">
-                <div id="modal-banner-color" class="absolute inset-0 bg-gradient-to-br opacity-50"></div>
-                <img id="modal-image" src="" alt="Project Banner" class="w-full h-full object-cover mix-blend-overlay">
+                <div id="modal-banner-color" class="absolute inset-0 bg-gradient-to-br opacity-50 transition-colors"></div>
+                <img id="modal-image" src="" alt="Project Banner" class="w-full h-full object-cover mix-blend-overlay opacity-80">
                 <div class="absolute bottom-6 left-6 z-10">
-                    <span id="modal-status" class="px-3 py-1 text-xs font-bold rounded-full border mb-3 inline-block"></span>
+                    <span id="modal-status" class="px-3 py-1 text-xs font-bold rounded-full border mb-3 inline-block bg-white/10 text-white border-white/20 backdrop-blur-sm"></span>
                     <h2 id="modal-title" class="text-3xl md:text-4xl font-bold text-white drop-shadow-lg"></h2>
                 </div>
             </div>
-            <div class="p-6 md:p-8 overflow-y-auto custom-scroll text-slate-300 flex-1">
+            <div class="p-6 md:p-8 overflow-y-auto custom-scroll flex-1">
                 <div class="flex flex-col md:flex-row gap-8">
                     <div class="flex-1">
-                        <h3 class="text-xl font-bold text-white mb-3 text-cyan-400">About the Project</h3>
-                        <p id="modal-desc" class="mb-6 leading-relaxed"></p>
+                        <h3 class="text-xl font-bold mb-3 text-cyan-500">About the Project</h3>
+                        <p id="modal-desc" class="mb-6 leading-relaxed text-slate-300"></p>
                     </div>
                     <div class="w-full md:w-64 bg-white/5 p-6 rounded-xl border border-white/10 h-fit">
-                        <h4 class="font-bold text-white mb-3">Category</h4>
-                        <p id="modal-category" class="text-sm mb-6"></p>
-                        <h4 class="font-bold text-white mb-3">Technologies</h4>
+                        <h4 class="font-bold mb-3">Category</h4>
+                        <p id="modal-category" class="text-sm mb-6 text-slate-400"></p>
+                        <h4 class="font-bold mb-3">Technologies</h4>
                         <div id="modal-tech" class="flex flex-wrap gap-2 mb-8"></div>
                         <a id="modal-github-link" href="#" onclick="openExternalFromModal(event)" class="w-full block text-center px-4 py-3 bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white rounded-lg font-bold transition duration-300 mb-3 cursor-pointer">
                             <i class="fab fa-github mr-2"></i> View Repository
@@ -162,6 +232,45 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     
     <script>
+        // ==========================================
+        // THEME TOGGLE LOGIC
+        // ==========================================
+        function updateThemeIcon() {
+            const btn = document.getElementById('theme-btn');
+            const isLight = document.documentElement.classList.contains('light-mode');
+            
+            if(isLight) {
+                btn.innerHTML = '<i class="fas fa-sun"></i>';
+                btn.classList.add('text-amber-500');
+                btn.classList.remove('text-slate-400', 'hover:text-cyan-400');
+            } else {
+                btn.innerHTML = '<i class="fas fa-moon"></i>';
+                btn.classList.remove('text-amber-500');
+                btn.classList.add('text-slate-400', 'hover:text-cyan-400');
+            }
+            
+            // Update 3D particles if scene is ready
+            if(typeof material !== 'undefined') {
+                material.color.setHex(isLight ? 0x0ea5e9 : 0x4facfe);
+            }
+        }
+
+        function toggleTheme() {
+            document.documentElement.classList.toggle('light-mode');
+            const isLight = document.documentElement.classList.contains('light-mode');
+            
+            // Save preference to local storage
+            localStorage.setItem('shahil_theme', isLight ? 'light' : 'dark');
+            updateThemeIcon();
+        }
+
+        // Set initial icon on load
+        window.addEventListener('DOMContentLoaded', updateThemeIcon);
+
+
+        // ==========================================
+        // EXTERNAL LINKS FIX
+        // ==========================================
         function openExternalSafe(url) {
             const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
             if (newWindow) newWindow.opener = null;
@@ -173,6 +282,9 @@
             openExternalSafe(url);
         }
 
+        // ==========================================
+        // PROJECTS DATA & RENDERING
+        // ==========================================
         const projectsData = [
             {
                 id: 1, title: "Live Mic to Speaker", category: "System Utility", status: "Completed", date: "2025-08", 
@@ -227,25 +339,27 @@
         function renderProjects() {
             container.innerHTML = "";
             projectsData.forEach((proj, index) => {
-                let statusColor = "bg-green-500/20 text-green-400 border-green-500/50";
-                if(proj.status.includes("Learning")) statusColor = "bg-yellow-500/20 text-yellow-400 border-yellow-500/50";
+                let statusBadge = `<div class="absolute top-3 right-3 text-[10px] font-bold px-2 py-1 rounded-md border z-20 shadow-sm backdrop-blur-md bg-green-500/20 text-green-500 border-green-500/50" style="transform: translateZ(60px);">${proj.status}</div>`;
+                if(proj.status.includes("Learning")) {
+                    statusBadge = `<div class="absolute top-3 right-3 text-[10px] font-bold px-2 py-1 rounded-md border z-20 shadow-sm backdrop-blur-md bg-amber-500/20 text-amber-500 border-amber-500/50" style="transform: translateZ(60px);">${proj.status}</div>`;
+                }
 
-                const techTags = proj.technologies.slice(0, 4).map(t => `<span class="text-[10px] px-2 py-1 bg-white/5 rounded border border-white/10 tracking-wide truncate max-w-[100px]">${t}</span>`).join('');
+                const techTags = proj.technologies.slice(0, 4).map(t => `<span class="text-[10px] px-2 py-1 bg-black/10 dark:bg-white/5 rounded border border-black/10 dark:border-white/10 tracking-wide truncate max-w-[100px] text-slate-500 dark:text-slate-400">${t}</span>`).join('');
 
                 const cardHTML = `
                     <div class="project-card glass-panel rounded-3xl p-6 cursor-pointer relative group" onclick="openModal(${index})" data-tilt data-tilt-max="15" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2">
-                        <div class="absolute top-3 right-3 text-[10px] font-bold px-2 py-1 rounded-md border ${statusColor} z-20" style="transform: translateZ(60px);">${proj.status}</div>
-                        <div class="card-image-wrapper w-full h-48 rounded-xl overflow-hidden mb-5 relative shadow-[0_10px_20px_rgba(0,0,0,0.5)]">
-                            <div class="absolute inset-0 bg-slate-900/20 group-hover:bg-transparent transition duration-300 z-10"></div>
+                        ${statusBadge}
+                        <div class="card-image-wrapper w-full h-48 rounded-xl overflow-hidden mb-5 relative shadow-[0_10px_20px_rgba(0,0,0,0.2)]">
+                            <div class="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition duration-300 z-10"></div>
                             <img src="${proj.image}" alt="${proj.title}" class="w-full h-full object-cover">
                         </div>
                         <div class="project-content">
                             <h3 class="text-xl font-bold mb-1 truncate">${proj.title}</h3>
-                            <p class="text-cyan-400 text-[11px] font-semibold mb-1 uppercase tracking-wider">${proj.category}</p>
+                            <p class="text-cyan-500 text-[11px] font-semibold mb-1 uppercase tracking-wider">${proj.category}</p>
                             <p class="text-slate-500 text-[10px] mb-3 uppercase font-mono">${proj.date}</p>
                             <p class="text-slate-400 text-sm mb-4 leading-relaxed line-clamp-2">${proj.shortDesc}</p>
                             <div class="flex gap-2 mb-4 flex-wrap">${techTags}</div>
-                            <button class="text-cyan-400 font-semibold text-sm flex items-center gap-2 group-hover:text-cyan-300">
+                            <button class="text-cyan-500 font-semibold text-sm flex items-center gap-2 group-hover:text-cyan-400">
                                 View Details <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
                             </button>
                         </div>
@@ -265,13 +379,11 @@
             
             const statusEl = document.getElementById('modal-status');
             statusEl.innerText = proj.status;
-            let statusColor = "bg-green-500/20 text-green-400 border-green-500/50";
-            if(proj.status.includes("Learning")) statusColor = "bg-yellow-500/20 text-yellow-400 border-yellow-500/50";
-            statusEl.className = `px-3 py-1 text-xs font-bold rounded-full border mb-3 inline-block ${statusColor}`;
-
-            document.getElementById('modal-banner-color').className = `absolute inset-0 bg-gradient-to-br opacity-60 ${proj.colorTheme || 'from-cyan-600 to-blue-500'}`;
+            
+            document.getElementById('modal-banner-color').className = `absolute inset-0 bg-gradient-to-br opacity-70 ${proj.colorTheme || 'from-cyan-600 to-blue-500'}`;
             document.getElementById('modal-image').src = proj.image;
-            document.getElementById('modal-tech').innerHTML = proj.technologies.map(t => `<span class="text-xs px-3 py-1 bg-white/10 rounded-full border border-white/20">${t}</span>`).join('');
+            
+            document.getElementById('modal-tech').innerHTML = proj.technologies.map(t => `<span class="text-xs px-3 py-1 bg-black/5 dark:bg-white/5 rounded-full border border-black/10 dark:border-white/10 text-slate-500 dark:text-slate-300">${t}</span>`).join('');
             
             document.getElementById('modal-github-link').href = proj.github;
 
@@ -284,7 +396,7 @@
         renderProjects();
 
         // ==========================================
-        // THREE.JS BACKGROUND
+        // THREE.JS BACKGROUND WITH DYNAMIC COLOR
         // ==========================================
         const canvas = document.getElementById('bg-canvas');
         const scene = new THREE.Scene();
@@ -299,7 +411,11 @@
         for(let i = 0; i < particlesCount * 3; i++) { posArray[i] = (Math.random() - 0.5) * 12; }
         particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
 
-        const material = new THREE.PointsMaterial({ size: 0.015, color: 0x4facfe, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending });
+        const getParticleColor = () => {
+            return document.documentElement.classList.contains('light-mode') ? 0x0ea5e9 : 0x4facfe; 
+        };
+
+        const material = new THREE.PointsMaterial({ size: 0.015, color: getParticleColor(), transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending });
         const particlesMesh = new THREE.Points(particlesGeometry, material);
         scene.add(particlesMesh);
         camera.position.z = 3;

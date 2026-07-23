@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shahil Shajahan | Tech Enthusiast</title>
+    <meta name="description" content="Portfolio of Shahil Shajahan, a Software Engineer specializing in Backend Systems, Automation, and Embedded Development.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        
+        /* 
+           FIXED BACKGROUND: Added the image directly to the body 
+           with a dark gradient overlay so it perfectly blends with the 3D particles.
+        */
+        body, html { 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Space Grotesk', sans-serif; 
+            color: #ffffff; 
+            overflow-x: hidden; 
+            scroll-behavior: smooth; 
+            
+            background: 
+                linear-gradient(rgba(5, 8, 20, 0.85), rgba(5, 8, 20, 0.85)),
+                url('https://media.licdn.com/dms/image/v2/D5616AQEFd2DK1C9gaw/profile-displaybackgroundimage-shrink_200_800/B56Z.LKdCmGQAQ-/0/1784746201559?e=1786579200&v=beta&t=m_pz-KcI-GlkIL6eY0d_5DRkz9h2c29Rpv3_lgSHUUg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+        
+        /* 3D Canvas Layer */
+        #bg-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; opacity: 0.9; pointer-events: none; }
+        
+        .glass-panel { background: rgba(16, 23, 42, 0.5); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); }
+        .glass-modal { background: rgba(10, 15, 30, 0.95); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); }
+        .gradient-text { background: linear-gradient(to right, #00f2fe, #4facfe, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .profile-img-container { position: relative; width: 300px; height: 300px; border-radius: 50%; perspective: 1000px; animation: float 6s ease-in-out infinite; z-index: 10; }
+        .profile-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 4px solid transparent; box-shadow: 0 0 40px rgba(79, 172, 254, 0.4); }
+        .orbit-ring { position: absolute; inset: -20px; border-radius: 50%; border: 2px dashed rgba(79, 172, 254, 0.4); animation: spin 15s linear infinite; }
+        .orbit-ring-2 { position: absolute; inset: -45px; border-radius: 50%; border: 2px solid rgba(192, 132, 252, 0.2); animation: spin 20s linear infinite reverse; }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-20px); } 100% { transform: translateY(0px); } }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        .project-card { transform-style: preserve-3d; transform: perspective(1000px); transition: border-color 0.3s ease; }
+        .project-card:hover { border-color: rgba(79, 172, 254, 0.5); }
+        .card-image-wrapper { transform: translateZ(50px); }
+        .project-content { transform: translateZ(40px); }
+
+        .modal-overlay { opacity: 0; visibility: hidden; transition: all 0.4s ease; }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-content { transform: scale(0.9) translateY(20px); opacity: 0; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .modal-overlay.active .modal-content { transform: scale(1) translateY(0); opacity: 1; }
+
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #4facfe; border-radius: 10px; }
+    </style>
+</head>
+<body class="antialiased selection:bg-cyan-500 selection:text-white">
+
+    <canvas id="bg-canvas"></canvas>
+
+    <nav class="fixed w-full z-40 glass-panel py-4">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold tracking-tighter">Shahil<span class="text-cyan-400">.</span></a>
+            <div class="hidden md:flex space-x-8 text-sm font-semibold tracking-wide">
+                <a href="#projects-section" class="hover:text-cyan-400 transition">Projects</a>
+                <a href="#contact" class="hover:text-cyan-400 transition">Contact</a>
+                <a href="javascript:void(0)" onclick="openExternalSafe('https://github.com/shahilshajahan')" class="hover:text-cyan-400 transition">GitHub</a>
+                <a href="javascript:void(0)" onclick="openExternalSafe('https://www.linkedin.com/in/shahilshajahan/')" class="hover:text-blue-400 transition">LinkedIn</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="min-h-screen flex flex-col md:flex-row items-center justify-center px-6 pt-20 max-w-7xl mx-auto gap-16 z-10 relative">
+        <div class="flex-1 text-center md:text-left z-10">
+            <p class="text-purple-400 font-semibold tracking-[0.2em] uppercase mb-4 text-sm animate-pulse">Tech Enthusiast & Developer</p>
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight drop-shadow-2xl">
+                Code with purpose. <br><span class="gradient-text text-6xl md:text-8xl">Build with passion.</span>
+            </h1>
+            <p class="text-lg md:text-xl text-slate-300 mb-10 leading-relaxed max-w-lg mx-auto md:mx-0">
+                I engineer resilient backend architectures, hardware integrations, and automation tools designed to optimize operations and solve complex business challenges. From concept to deployment, I focus on delivering scalable, high-performance software.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-5 justify-center md:justify-start">
+                <a href="#projects-section" class="px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-full font-bold hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(6,182,212,0.5)]">
+                    Explore My Capabilities
+                </a>
+            </div>
+        </div>
+        
+        <div class="flex-1 flex justify-center items-center mt-12 md:mt-0">
+            <div class="profile-img-container">
+                <img src="https://avatars.githubusercontent.com/u/152691954?v=4" alt="Shahil Shajahan" class="profile-img">
+                <div class="orbit-ring"></div>
+                <div class="orbit-ring-2"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects-section" class="py-24 px-6 relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16 relative">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">Project <span class="gradient-text">Portfolio</span></h2>
+                <p class="text-slate-400 text-lg">A showcase of production-ready applications, embedded systems, and foundational learning milestones.</p>
+            </div>
+            <div id="projects-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-10"></div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-20 px-6 relative z-10 bg-gradient-to-t from-slate-900 to-transparent">
+        <div class="max-w-3xl mx-auto text-center glass-panel p-10 rounded-3xl">
+            <h2 class="text-3xl font-bold mb-6">Let's Build Together</h2>
+            <p class="text-slate-400 mb-8">Looking for an engineer who understands both logic and business value? Let's connect.</p>
+            <a href="mailto:shahilshajahan@proton.me" class="inline-flex items-center gap-3 px-8 py-4 bg-cyan-500/20 border border-cyan-500/50 hover:bg-cyan-500/40 text-white rounded-full font-bold transition duration-300 text-lg">
+                <i class="fas fa-envelope text-cyan-400"></i> shahilshajahan@proton.me
+            </a>
+            <div class="flex justify-center gap-8 mt-10">
+                <a href="javascript:void(0)" onclick="openExternalSafe('https://github.com/shahilshajahan')" class="text-slate-400 hover:text-white text-3xl transition duration-300 hover:scale-110"><i class="fab fa-github"></i></a>
+                <a href="javascript:void(0)" onclick="openExternalSafe('https://www.linkedin.com/in/shahilshajahan/')" class="text-slate-400 hover:text-blue-500 text-3xl transition duration-300 hover:scale-110"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <div id="project-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4">
+        <div class="glass-modal modal-content w-full max-w-4xl rounded-2xl overflow-hidden relative flex flex-col max-h-[90vh]">
+            <button onclick="closeModal()" class="absolute top-4 right-4 z-20 w-10 h-10 bg-black/50 hover:bg-red-500/80 rounded-full flex items-center justify-center text-white transition">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="relative h-56 md:h-72 w-full bg-slate-800">
+                <div id="modal-banner-color" class="absolute inset-0 bg-gradient-to-br opacity-50"></div>
+                <img id="modal-image" src="" alt="Project Banner" class="w-full h-full object-cover mix-blend-overlay">
+                <div class="absolute bottom-6 left-6 z-10">
+                    <span id="modal-status" class="px-3 py-1 text-xs font-bold rounded-full border mb-3 inline-block"></span>
+                    <h2 id="modal-title" class="text-3xl md:text-4xl font-bold text-white drop-shadow-lg"></h2>
+                </div>
+            </div>
+            <div class="p-6 md:p-8 overflow-y-auto custom-scroll text-slate-300 flex-1">
+                <div class="flex flex-col md:flex-row gap-8">
+                    <div class="flex-1">
+                        <h3 class="text-xl font-bold text-white mb-3 text-cyan-400">About the Project</h3>
+                        <p id="modal-desc" class="mb-6 leading-relaxed"></p>
+                    </div>
+                    <div class="w-full md:w-64 bg-white/5 p-6 rounded-xl border border-white/10 h-fit">
+                        <h4 class="font-bold text-white mb-3">Category</h4>
+                        <p id="modal-category" class="text-sm mb-6"></p>
+                        <h4 class="font-bold text-white mb-3">Technologies</h4>
+                        <div id="modal-tech" class="flex flex-wrap gap-2 mb-8"></div>
+                        <a id="modal-github-link" href="#" onclick="openExternalFromModal(event)" class="w-full block text-center px-4 py-3 bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white rounded-lg font-bold transition duration-300 mb-3 cursor-pointer">
+                            <i class="fab fa-github mr-2"></i> View Repository
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <script>
+        function openExternalSafe(url) {
+            const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+            if (newWindow) newWindow.opener = null;
+        }
+
+        function openExternalFromModal(e) {
+            e.preventDefault();
+            const url = e.currentTarget.getAttribute('href');
+            openExternalSafe(url);
+        }
+
+        const projectsData = [
+            {
+                id: 1, title: "Live Mic to Speaker", category: "System Utility", status: "Completed", date: "2025-08", 
+                image: "https://media.licdn.com/dms/image/v2/D562DAQHb5hcgEzKtQw/profile-treasury-image-shrink_1280_1280/B56Z.OGQobKkAY-/0/1784795433894?e=1785409200&v=beta&t=CfCa4xw-kEWODd8PlMoeKej2VKWCVDxW7PD-gxlIsv8",
+                shortDesc: "Real-time audio processing desktop utility in Python.",
+                fullDesc: "A lightweight, low-latency Python utility designed to capture live microphone input and directly route it to the system speakers in real-time, effectively turning a PC into an amplifier system.",
+                technologies: ["Python", "Audio Processing"],
+                github: "https://github.com/shahilshajahan/LiveMicToSpeaker", colorTheme: "from-red-500 to-orange-400"
+            },
+            {
+                id: 2, title: "Calculator Application", category: "Software Fundamentals", status: "Learning Project", date: "2024-02", 
+                image: "https://media.licdn.com/dms/image/v2/D562DAQGbgBY29YHfmg/profile-treasury-image-shrink_1280_1280/B56Z.OCiJlKkAY-/0/1784794456956?e=1785409200&v=beta&t=3amGMtFk1vH16tT2CoFWCE4W1PR0sAKkWd8P0mCzYII",
+                shortDesc: "Beginner application built to grasp programming logic and UI state.",
+                fullDesc: "A straightforward calculator application created in the early stages of my programming journey. It was specifically designed to help me understand how raw mathematical logic is translated into code.",
+                technologies: ["Java", "Mathematics"], 
+                github: "https://github.com/shahilshajahan/Calculator", colorTheme: "from-orange-500 to-yellow-400"
+            },
+            {
+                id: 3, title: "Arduino RTC Timing Switch", category: "IoT / Hardware", status: "Completed", date: "2024-02", 
+                image: "https://media.licdn.com/dms/image/v2/D562DAQGtuHqzZCxChg/profile-treasury-image-shrink_1280_1280/B56Z.OEp4vGgAg-/0/1784795012936?e=1785409200&v=beta&t=mkQT6tuYXQ0YZoLNcUjrZWO5Mz_omYt5bzlbioPm0_E",
+                shortDesc: "Hardware integration utilizing an RTC module and relays.",
+                fullDesc: "An embedded systems project designed for home automation. By utilizing an Arduino paired with a Real-Time Clock (RTC) module and relay switches, this system automates electrical appliances based on exact time schedules.",
+                technologies: ["Arduino", "C++", "IoT"],
+                github: "https://github.com/shahilshajahan/Arduino-RTC-Timing-Switch", colorTheme: "from-purple-600 to-pink-400"
+            },
+            {
+                id: 4, title: "Firmware for Xiaomi Mi 10i 5G", category: "Embedded / Android", status: "Completed", date: "2023-11", 
+                image: "https://media.licdn.com/dms/image/v2/D562DAQGfiS7rArBXIw/profile-treasury-image-shrink_1280_1280/B56Z.N._k7IQAY-/0/1784793528915?e=1785409200&v=beta&t=dHjItoQFFK_S6rsYcdrzLP08PFB0h-rNZ-QMRtKp9v0",
+                shortDesc: "Firmware customization and open-source contribution for gauguininpro.",
+                fullDesc: "A deep dive into Android systems. This repository houses customized firmware development for the Xiaomi Mi 10i 5G (gauguininpro). It involves kernel optimizations, system patching, and providing open-source builds.",
+                technologies: ["Firmware Tweaking", "C++", "Custom OS", "Recovery", "Bootloader"], 
+                github: "https://github.com/shahilshajahan/firmware-for-gauguininpro", colorTheme: "from-emerald-500 to-teal-400"
+            },
+            {
+                id: 5, title: "Movie Ticket Booking", category: "Backend API", status: "Learning Project", date: "2023-08", 
+                image: "https://media.licdn.com/dms/image/v2/D562DAQEEVTyGAkXcig/profile-treasury-image-shrink_1280_1280/B56Z.OBqLlHUAY-/0/1784794227702?e=1785409200&v=beta&t=G5qnBFlktTr74sSsM_fBP2_DureX4dvPeJTLH837myY",
+                shortDesc: "My first Python project. Built while learning Python and SQL.",
+                fullDesc: "This was my foundational step into backend programming. I built a movie ticket booking system to understand how Python interfaces with SQL databases. Though it was discontinued during development, it serves as a crucial learning milestone in my journey.",
+                technologies: ["Python", "SQL", "Database"],
+                github: "https://github.com/shahilshajahan/Movie-Ticket-Booking-Py", colorTheme: "from-blue-600 to-cyan-400"
+            }
+        ];
+
+        const container = document.getElementById('projects-container');
+        
+        projectsData.sort((a, b) => {
+            if (a.status === "Completed" && b.status !== "Completed") return -1;
+            if (a.status !== "Completed" && b.status === "Completed") return 1;
+            return new Date(b.date) - new Date(a.date);
+        });
+
+        function renderProjects() {
+            container.innerHTML = "";
+            projectsData.forEach((proj, index) => {
+                let statusColor = "bg-green-500/20 text-green-400 border-green-500/50";
+                if(proj.status.includes("Learning")) statusColor = "bg-yellow-500/20 text-yellow-400 border-yellow-500/50";
+
+                const techTags = proj.technologies.slice(0, 4).map(t => `<span class="text-[10px] px-2 py-1 bg-white/5 rounded border border-white/10 tracking-wide truncate max-w-[100px]">${t}</span>`).join('');
+
+                const cardHTML = `
+                    <div class="project-card glass-panel rounded-3xl p-6 cursor-pointer relative group" onclick="openModal(${index})" data-tilt data-tilt-max="15" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2">
+                        <div class="absolute top-3 right-3 text-[10px] font-bold px-2 py-1 rounded-md border ${statusColor} z-20" style="transform: translateZ(60px);">${proj.status}</div>
+                        <div class="card-image-wrapper w-full h-48 rounded-xl overflow-hidden mb-5 relative shadow-[0_10px_20px_rgba(0,0,0,0.5)]">
+                            <div class="absolute inset-0 bg-slate-900/20 group-hover:bg-transparent transition duration-300 z-10"></div>
+                            <img src="${proj.image}" alt="${proj.title}" class="w-full h-full object-cover">
+                        </div>
+                        <div class="project-content">
+                            <h3 class="text-xl font-bold mb-1 truncate">${proj.title}</h3>
+                            <p class="text-cyan-400 text-[11px] font-semibold mb-1 uppercase tracking-wider">${proj.category}</p>
+                            <p class="text-slate-500 text-[10px] mb-3 uppercase font-mono">${proj.date}</p>
+                            <p class="text-slate-400 text-sm mb-4 leading-relaxed line-clamp-2">${proj.shortDesc}</p>
+                            <div class="flex gap-2 mb-4 flex-wrap">${techTags}</div>
+                            <button class="text-cyan-400 font-semibold text-sm flex items-center gap-2 group-hover:text-cyan-300">
+                                View Details <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += cardHTML;
+            });
+            VanillaTilt.init(document.querySelectorAll(".project-card"));
+        }
+
+        const modal = document.getElementById('project-modal');
+        function openModal(index) {
+            const proj = projectsData[index];
+            document.getElementById('modal-title').innerText = proj.title;
+            document.getElementById('modal-desc').innerText = proj.fullDesc;
+            document.getElementById('modal-category').innerText = proj.category;
+            
+            const statusEl = document.getElementById('modal-status');
+            statusEl.innerText = proj.status;
+            let statusColor = "bg-green-500/20 text-green-400 border-green-500/50";
+            if(proj.status.includes("Learning")) statusColor = "bg-yellow-500/20 text-yellow-400 border-yellow-500/50";
+            statusEl.className = `px-3 py-1 text-xs font-bold rounded-full border mb-3 inline-block ${statusColor}`;
+
+            document.getElementById('modal-banner-color').className = `absolute inset-0 bg-gradient-to-br opacity-60 ${proj.colorTheme || 'from-cyan-600 to-blue-500'}`;
+            document.getElementById('modal-image').src = proj.image;
+            document.getElementById('modal-tech').innerHTML = proj.technologies.map(t => `<span class="text-xs px-3 py-1 bg-white/10 rounded-full border border-white/20">${t}</span>`).join('');
+            
+            document.getElementById('modal-github-link').href = proj.github;
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeModal() { modal.classList.remove('active'); document.body.style.overflow = 'auto'; }
+        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+        renderProjects();
+
+        // ==========================================
+        // THREE.JS BACKGROUND
+        // ==========================================
+        const canvas = document.getElementById('bg-canvas');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 800;
+        const posArray = new Float32Array(particlesCount * 3);
+        for(let i = 0; i < particlesCount * 3; i++) { posArray[i] = (Math.random() - 0.5) * 12; }
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+        const material = new THREE.PointsMaterial({ size: 0.015, color: 0x4facfe, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending });
+        const particlesMesh = new THREE.Points(particlesGeometry, material);
+        scene.add(particlesMesh);
+        camera.position.z = 3;
+
+        let mouseX = 0, mouseY = 0, targetX = 0, targetY = 0;
+        const windowHalfX = window.innerWidth / 2, windowHalfY = window.innerHeight / 2;
+        document.addEventListener('mousemove', (event) => { mouseX = (event.clientX - windowHalfX); mouseY = (event.clientY - windowHalfY); });
+
+        const clock = new THREE.Clock();
+        function animate() {
+            requestAnimationFrame(animate);
+            particlesMesh.rotation.y = clock.getElapsedTime() * 0.03;
+            targetX = mouseX * 0.001; targetY = mouseY * 0.001;
+            particlesMesh.rotation.y += 0.05 * (targetX - particlesMesh.rotation.y);
+            particlesMesh.rotation.x += 0.05 * (targetY - particlesMesh.rotation.x);
+            renderer.render(scene, camera);
+        }
+        animate();
+        window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
+    </script>
+</body>
+</html>
